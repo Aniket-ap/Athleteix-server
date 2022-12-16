@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import authRoutes from "./routes/auth.js";
 
 dotenv.config();
 
@@ -14,9 +15,8 @@ mongoose
     console.log("DB ERROR => ", err);
   });
 
-app.get("/", (req, res) => {
-  res.send({ message: "Hello Node" });
-});
+// router middleware
+app.use("/api", authRoutes);
 
 const port = process.env.PORT || 8000;
 
