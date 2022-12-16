@@ -2,7 +2,7 @@ import express from "express";
 
 const router = express.Router();
 // middlewares
-import { requereSignIn } from "../middlewares/auth.js";
+import { requereSignIn, isAdmin } from "../middlewares/auth.js";
 
 // controllers
 import { register, login } from "../controllers/auth.js";
