@@ -63,8 +63,8 @@ export const login = async (req, res) => {
       return res.json({ error: "User not found" });
     }
     const matchPassword = await comparePassword(password, user.password);
-    if(!matchPassword){
-      return res.json({error: "Wrong password"})
+    if (!matchPassword) {
+      return res.json({ error: "Wrong password" });
     }
     // signed jwt
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
