@@ -1,13 +1,13 @@
 import express from "express";
 
 const router = express.Router();
+
 // middlewares
 import { requereSignIn, isAdmin } from "../middlewares/auth.js";
 
 // controllers
-import { register, login } from "../controllers/auth.js";
+import {create} from "../controllers/category.js"
 
-router.post("/register", register);
-router.post("/login", login);
+router.post("/category", requereSignIn, isAdmin, create)
 
-export default router;
+export default router
