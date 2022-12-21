@@ -9,5 +9,8 @@ import { register, login } from "../controllers/auth.js";
 
 router.post("/register", register);
 router.post("/login", login);
+router.get("/auth-check", requereSignIn, (req, res) => {
+    res.json({ok: true})
+});
 
 export default router;
