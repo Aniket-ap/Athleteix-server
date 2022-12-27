@@ -12,5 +12,8 @@ router.post("/login", login);
 router.get("/auth-check", requereSignIn, (req, res) => {
     res.json({ok: true})
 });
+router.get("/admin-check", requereSignIn, isAdmin, (req, res) => {
+    res.json({ok: true})
+});
 
 export default router;

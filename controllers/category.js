@@ -9,7 +9,7 @@ export const create = async (req, res) => {
     }
     const existingCategory = await Category.findOne({ name });
     if (existingCategory) {
-      return res.json({ error: "Already existe" });
+      return res.json({ error: "Already exist" });
     }
 
     const caregory = await new Category({ name, slug: slugify(name) }).save();
