@@ -10,17 +10,17 @@ export const create = async (req, res) => {
 
     switch (true) {
       case !name.trim():
-        res.json({ error: "Name is required" });
+        return res.json({ error: "Name is required" });
       case !description.trim():
-        res.json({ error: "Description is required" });
+        return res.json({ error: "Description is required" });
       case !price.trim():
-        res.json({ error: "Price is required" });
+        return res.json({ error: "Price is required" });
       case !category.trim():
-        res.json({ error: "Category is required" });
+        return res.json({ error: "Category is required" });
       case !quantity.trim():
-        res.json({ error: "Quantity is required" });
+        return res.json({ error: "Quantity is required" });
       case photo && photo.size > 1000000:
-        res.json({ error: "Image should be less than 1mb in size" });
+        return res.json({ error: "Image should be less than 1mb in size" });
     }
 
     const product = new Product({ ...req.fields, slug: slugify(name) });
@@ -116,3 +116,59 @@ export const update = async (req, res) => {
     }
   };
 
+  export const filteredProducts = async (req, res) =>{
+    try {
+      const {checked, radio} = req.body;
+
+      let args = {}
+      if(checked.length > 0){
+        args.category = checked;
+      }
+      if(radio.length > 0){
+        args.price = { $gte: radio[0], $lte: radio[1] };
+      }
+
+      console.log(args)
+
+      const products = await Product.find(args)
+      res.json(products)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  export const productsCount = async (req, res) => {
+    try {
+      const total = await Product.find({}).estimatedDocumentCount();
+      res.json(total)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  export const listProducts = async (req, res) => {
+    try {
+      const perPage = 6;
+      const page = req.params.page ? req.params.page: 1;
+      const products = await Product.find({}).select('-photo').skip((page - 1) * perPage).limit(perPage).sort({createdAt: -1}) 
+      res.json(products)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  export const productSearch = async (req, res) => {
+    try {
+      const {keyword} = req.params;
+      const results = await Product.find({
+        $or : [
+          {name: {$regex: keyword, $options: "i"}}
+        ]
+      }).select("-photo");
+
+      res.json(results)
+    } catch (error) {
+      console.log(error)
+    }
+  }
